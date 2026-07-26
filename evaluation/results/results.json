@@ -1,0 +1,11 @@
+{
+  "model_name": "facebook/bart-large-cnn",
+  "dataset": "abisee/cnn_dailymail (3.0.0), test split",
+  "num_samples": 30,
+  "rouge1_f_mean": 0.3469,
+  "rouge2_f_mean": 0.1459,
+  "rougeL_f_mean": 0.2528,
+  "processing_time_seconds_mean": 5.53,
+  "processing_time_seconds_p95": 6.92,
+  "compression_rate_mean": 0.0869
+}
