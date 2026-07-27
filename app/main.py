@@ -66,6 +66,20 @@ def handle_upload(contents: str | None, filename: str | None):
     Output("model-info-box", "children"),
     Input("summarize-button", "n_clicks"),
     State("extracted-text-store", "data"),
+    running=[
+        # Button während der Verarbeitung deaktivieren, damit kein Doppelklick
+        # eine parallele Anfrage an den ml-service auslöst.
+        (Output("summarize-button", "disabled"), True, False),
+        # Sofortige Rückmeldung, dass die Zusammenfassung im Hintergrund läuft.
+        (
+            Output("model-info-box", "children"),
+            html.Div(
+                "⏳ Zusammenfassung wird erstellt. Dies kann je nach "
+                "Dokumentlänge einige Sekunden dauern …"
+            ),
+            html.Div(),
+        ),
+    ],
     prevent_initial_call=True,
 )
 def handle_summarize(n_clicks: int, cleaned_text: str | None):
