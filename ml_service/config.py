@@ -11,7 +11,8 @@ MODEL_NAME: str = os.environ.get("SUMMARIZATION_MODEL", "facebook/bart-large-cnn
 
 # Grenzwerte für die Generierung. Werte orientieren sich an gängigen
 # Empfehlungen für Nachrichtentext-Zusammenfassung (CNN/DailyMail-Domäne).
-MAX_SUMMARY_TOKENS: int = int(os.environ.get("MAX_SUMMARY_TOKENS", "180"))
+# Bei Austausch des Modells, müssen auch diese Parameter angepasst werden.
+MAX_SUMMARY_TOKENS: int = int(os.environ.get("MAX_SUMMARY_TOKENS", "150"))
 MIN_SUMMARY_TOKENS: int = int(os.environ.get("MIN_SUMMARY_TOKENS", "30"))
 
 SERVICE_PORT: int = int(os.environ.get("ML_SERVICE_PORT", "8001"))
