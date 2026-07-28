@@ -25,6 +25,7 @@ app = dash.Dash(__name__, title="Dokumentenzusammenfasser")
 server = app.server  # für WSGI-Server (z. B. gunicorn) im Container
 app.layout = build_layout()
 
+MAX_PAGES = 20
 
 @app.callback(
     Output("upload-status", "children"),
@@ -52,6 +53,17 @@ def handle_upload(contents: str | None, filename: str | None):
         return f"❌ Ungültige Datei: {exc}", "status-box status-error", None, True
     except pdf_utils.NoTextExtractedError as exc:
         return f"❌ {exc}", "status-box status-error", None, True
+
+    # Seitengrenze einbauen, um große Dokumente nicht zu verarbeiten.
+    if extraction.num_pages > MAX_PAGES:
+        status_message = (
+            f"⚠ Das Dokument hat {extraction.num_pages} Seiten und überschreitet "
+            f"die aktuell erlaubte Grenze von {MAX_PAGES} Seiten.\n"
+            "Bitte wende dich an die Administration, wenn größere Dokumente "
+            "freigegeben oder zusammengefasst werden sollen."
+        )
+        # Kein Text im Store, Button bleibt deaktiviert.
+        return status_message, "status-box status-warning", None, True
 
     cleaned_text = preprocessing.clean_text(extraction.text)
     status_message = (

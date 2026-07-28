@@ -22,6 +22,7 @@ def build_layout() -> html.Div:
                 children=[
                     html.H1("Dokumentenzusammenfasser"),
                     html.P("PDF hochladen und automatisch zusammenfassen lassen."),
+                    html.P("Max. zulässige Länge: 20 Seiten."),
                 ],
             ),
             # --- Upload-Bereich ---
