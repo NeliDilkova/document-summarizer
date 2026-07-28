@@ -49,6 +49,7 @@ def summarize_text(text: str) -> str:
         text,
         max_length=config.MAX_SUMMARY_TOKENS,
         min_length=config.MIN_SUMMARY_TOKENS,
+        truncation=True,
         do_sample=False,
     )
     return result[0]["summary_text"]
