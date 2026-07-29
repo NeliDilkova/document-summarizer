@@ -27,6 +27,7 @@ app.layout = build_layout()
 
 MAX_PAGES = 20
 
+
 @app.callback(
     Output("upload-status", "children"),
     Output("upload-status", "className"),
@@ -39,7 +40,7 @@ MAX_PAGES = 20
 def handle_upload(contents: str | None, filename: str | None):
     """
     Validiert und verarbeitet die hochgeladene Datei, sobald sie ausgewählt
-    wurde. Extrahierter Text wird nur im Browser (dcc.Store) zwischengelegt,
+    wurde. Extrahierter Text wird nur im Browser zwischengelegt,
     damit auf dem Server keine Kopie über die Anfrage hinaus verbleibt.
     """
     if contents is None or filename is None:
@@ -54,7 +55,6 @@ def handle_upload(contents: str | None, filename: str | None):
     except pdf_utils.NoTextExtractedError as exc:
         return f"❌ {exc}", "status-box status-error", None, True
 
-    # Seitengrenze einbauen, um große Dokumente nicht zu verarbeiten.
     if extraction.num_pages > MAX_PAGES:
         status_message = (
             f"⚠ Das Dokument hat {extraction.num_pages} Seiten und überschreitet "
@@ -62,7 +62,6 @@ def handle_upload(contents: str | None, filename: str | None):
             "Bitte wende dich an die Administration, wenn größere Dokumente "
             "freigegeben oder zusammengefasst werden sollen."
         )
-        # Kein Text im Store, Button bleibt deaktiviert.
         return status_message, "status-box status-warning", None, True
 
     cleaned_text = preprocessing.clean_text(extraction.text)
@@ -79,10 +78,7 @@ def handle_upload(contents: str | None, filename: str | None):
     Input("summarize-button", "n_clicks"),
     State("extracted-text-store", "data"),
     running=[
-        # Button während der Verarbeitung deaktivieren, damit kein Doppelklick
-        # eine parallele Anfrage an den ml-service auslöst.
         (Output("summarize-button", "disabled"), True, False),
-        # Sofortige Rückmeldung, dass die Zusammenfassung im Hintergrund läuft.
         (
             Output("model-info-box", "children"),
             html.Div(
@@ -110,7 +106,33 @@ def handle_summarize(n_clicks: int, cleaned_text: str | None):
         [
             html.P(f"Modell: {result.model_name}"),
             html.P(f"Verarbeitungsdauer: {result.processing_time_seconds} s"),
-            html.P(f"Kompressionsrate: {result.compression_rate}"),
+            html.P(
+                [
+                    html.Strong("Textnähe zum Original: "),
+                    f"{result.extractive_coverage * 100:.0f} % ",
+                    html.Span(
+                        "(Anteil der Zusammenfassung, der wortwörtlich aus "
+                        "zusammenhängenden Textstellen des Originaldokuments "
+                        "stammt — ein höherer Wert zeigt, dass sich die "
+                        "Zusammenfassung eng am tatsächlichen Dokumentinhalt "
+                        "orientiert.)",
+                        className="metric-explanation",
+                    ),
+                ]
+            ),
+            html.P(
+                [
+                    html.Strong("Kompressionsrate: "),
+                    f"{result.compression_rate}",
+                    html.Span(
+                        " (Verhältnis der Zeichenanzahl von Zusammenfassung zu "
+                        "Originaltext — z. B. bedeutet 0,1, dass die "
+                        "Zusammenfassung etwa 10 % der ursprünglichen "
+                        "Textlänge hat.)",
+                        className="metric-explanation",
+                    ),
+                ]
+            ),
             html.P(f"Abschnitte verarbeitet: {len(chunks)}"),
         ]
     )
