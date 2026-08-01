@@ -66,7 +66,7 @@ pip install pytest fastapi httpx
 python -m pytest tests/ -v
 ```
 
-Die 21 Unit-Tests decken die Dateiprüfung, PDF-Textextraktion, Textvorverarbeitung, den HTTP-Client zum ML-Service sowie die FastAPI-Endpunkte ab (Modellaufrufe werden dabei gemockt).
+Die Unit-Tests decken die Dateiprüfung, PDF-Textextraktion, Textvorverarbeitung, den HTTP-Client zum ML-Service sowie die FastAPI-Endpunkte ab (Modellaufrufe werden gemockt).
 
 ## Modellbewertung
 
