@@ -7,5 +7,5 @@ if errorlevel 1 (
     exit /b
 )
 start /min cmd /c "docker compose up --build"
-timeout /t 8 /nobreak
+timeout /t 20 /nobreak
 start http://localhost:8050
