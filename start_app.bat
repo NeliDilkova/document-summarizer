@@ -6,6 +6,6 @@ if errorlevel 1 (
     pause
     exit /b
 )
-start /min cmd /c "docker compose up --build"
-timeout /t 20 /nobreak
+start /min cmd /c "docker compose build --no-cache && docker compose up"
+timeout /t 60 /nobreak
 start http://localhost:8050
