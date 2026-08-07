@@ -29,6 +29,9 @@ document-summarizer/
 │   └── results/            # Ergebnisse der Bewertung
 ├── tests/               # Unit-Tests (pytest)
 └── docker-compose.yml
+└── setup_app.bat   # Setup-Shortcut für Endnutzer
+└── start_app.bat   # Start-Shortcut für Endnutzer
+└── stop_app.bat    # Stop-Shortcut für Endnutzer
 ```
 
 ## Lokal starten (mit Docker)
@@ -36,7 +39,7 @@ document-summarizer/
 Voraussetzung: Docker und Docker Compose sind installiert.
 
 ```bash
-git clone https://github.com/<username>/document-summarizer.git
+git clone https://github.com/NeliDilkova/document-summarizer.git
 cd document-summarizer
 docker compose up --build
 ```
@@ -44,6 +47,17 @@ docker compose up --build
 Anschließend im Browser öffnen: [http://localhost:8050](http://localhost:8050)
 
 Der erste Start dauert etwas länger, da das Zusammenfassungsmodell (~1,6 GB) beim Bau des `ml-service`-Images heruntergeladen wird. Danach läuft alles lokal, ohne Internetverbindung — es werden keine Daten an Dritte übermittelt.
+
+## Über Shortcut, mit Docker im Hintergrund (Endnutzer)
+
+https://github.com/NeliDilkova/document-summarizer.git
+Code → download .zip
+
+.zip Ordner lokal entpacken
+
+1. Einmalig im entpackten Ordner: Doppelklick auf setup_app.bat → Build läuft durch, Fenster zeigt Fortschritt, am Ende pause.
+2. Danach jederzeit: Doppelklick auf start_app.bat → Container starten (kein Neu-Build), Browser öffnet sich automatisch.
+3. Am Ende der Nutzung: Doppelklick auf stop_app.bat → Container werden sauber heruntergefahren.
 
 ## Ohne Docker (Entwicklung)
 
