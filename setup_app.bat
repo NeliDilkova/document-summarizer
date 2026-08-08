@@ -10,7 +10,7 @@ if errorlevel 1 (
 )
 
 echo Einmaliges Setup wird gestartet. Dies kann je nach Internetverbindung mehrere Minuten dauern...
-docker compose build
+docker compose build --no-cache
 
 echo Setup abgeschlossen. Du kannst die App jetzt jederzeit mit start_app.bat starten.
 pause
